@@ -151,7 +151,7 @@
         })();
 
         ////////////////////////////////////////////////////////////////////////
-        // Reset terminal
+        // Reset console
         extern.reset = function(){
             var welcome = (typeof config.welcomeMessage != 'undefined');
             inner.parent().fadeOut(function(){
