@@ -171,9 +171,9 @@
         };
 
         ////////////////////////////////////////////////////////////////////////
-        // Reset terminal
-        extern.notice = function(msg,style){
-            var n = $('<div class="notice"></div>').append($('<div></div>').text(msg))
+        // Display a notice
+        extern.notify = function(msg,style){
+            var n = $('<div class="jquery-console-notice"></div>').append($('<div></div>').text(msg))
                 .css({visibility:'hidden'});
             container.append(n);
             var focused = true;
@@ -184,10 +184,15 @@
                     });
                 },4000);
             else if (style=='prompt') {
-                var a = $('<br/><div class="action"><a href="javascript:">OK</a><div class="clear"></div></div>');
+                var a = $('<br/><div class="jquery-console-action"><a href="javascript:">OK</a><div class="jquery-console-clear"></div></div>');
                 n.append(a);
                 focused = false;
-                a.click(function(){ n.fadeOut(function(){ n.remove();inner.css({opacity:1}) }); });
+                a.click(function(){
+                    n.fadeOut(function(){
+                        n.remove();
+                        inner.css({opacity:1});
+                    });
+                });
             }
             var h = n.height();
             n.css({height:'0px',visibility:'visible'})
