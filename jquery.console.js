@@ -1,4 +1,4 @@
-// JQuery Console 1.0
+// JQuery Console 1.1.0
 // Sun Feb 21 20:28:47 GMT 2010
 //
 // Copyright 2010 Chris Done, Simon David Pratt. All rights reserved.
