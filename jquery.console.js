@@ -204,6 +204,15 @@
         };
 
         ////////////////////////////////////////////////////////////////////////
+        // Append to console
+        extern.append = function(msg,className){
+            var prompt = inner.children().last().remove();
+            appendMessage(msg,className);
+            inner.append(prompt);
+            scrollToBottom();
+        };
+
+        ////////////////////////////////////////////////////////////////////////
         // Make a new prompt box
         function newPromptBox() {
             column = 0;
@@ -480,6 +489,13 @@
         function commandResult(msg,className) {
             column = -1;
             updatePromptDisplay();
+            appendMessage(msg,className);
+            newPromptBox();
+        };
+
+        ////////////////////////////////////////////////////////////////////////
+        // Append message(s) to the console
+        function appendMessage(msg,className) {
             if (typeof msg == 'string') {
                 message(msg,className);
             } else if ($.isArray(msg)) {
@@ -490,8 +506,7 @@
             } else { // Assume it's a DOM node or jQuery object.
               inner.append(msg);
             }
-            newPromptBox();
-        };
+        }
 
         ////////////////////////////////////////////////////////////////////////
         // Display a message
