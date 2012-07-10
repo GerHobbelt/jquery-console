@@ -436,7 +436,9 @@
         function handleCommand() {
             if (typeof config.commandHandle == 'function') {
 		disableInput();
-                addToHistory(promptText);
+                if(!extern.passwordPrompt) {
+                    addToHistory(promptText);
+                }
                 var text = promptText;
                 if (extern.passwordPrompt) {
                     if (continuedText) {
