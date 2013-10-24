@@ -1,4 +1,4 @@
-// JQuery Console 1.0
+// JQuery Console 1.1.0
 // Sun Feb 21 20:28:47 GMT 2010
 //
 // Copyright 2010 Chris Done, Simon David Pratt. All rights reserved.
@@ -160,7 +160,7 @@
 		})();
 
 		////////////////////////////////////////////////////////////////////////
-		// Reset terminal
+        // Reset terminal
 		extern.reset = function(){
 			var welcome = (typeof config.welcomeMessage != 'undefined');
 			inner.parent().fadeOut(function(){
@@ -180,9 +180,9 @@
 		};
 
 		////////////////////////////////////////////////////////////////////////
-		// Reset terminal
-		extern.notice = function(msg,style){
-			var n = $('<div class="notice"></div>').append($('<div></div>').text(msg))
+        // Display a notice
+        extern.notice = function(msg,style){
+            var n = $('<div class="jquery-console-notice"></div>').append($('<div></div>').text(msg))
 				.css({visibility:'hidden'});
 			container.append(n);
 			var focused = true;
@@ -193,10 +193,15 @@
 					});
 				},4000);
 			else if (style=='prompt') {
-				var a = $('<br/><div class="action"><a href="javascript:">OK</a><div class="clear"></div></div>');
+                var a = $('<br/><div class="jquery-console-action"><a href="javascript:">OK</a><div class="jquery-console-clear"></div></div>');
 				n.append(a);
 				focused = false;
-				a.click(function(){ n.fadeOut(function(){ n.remove();inner.css({opacity:1}) }); });
+                a.click(function(){
+                    n.fadeOut(function(){
+                        n.remove();
+                        inner.css({opacity:1});
+                    });
+                });
 			}
 			var h = n.height();
 			n.css({height:'0px',visibility:'visible'})
@@ -205,6 +210,15 @@
 				});
 			n.css('cursor','default');
 			return n;
+        };
+
+        ////////////////////////////////////////////////////////////////////////
+        // Append to console
+        extern.append = function(msg,className){
+            var prompt = inner.children().last().remove();
+            appendMessage(msg,className);
+            inner.append(prompt);
+            scrollToBottom();
 		};
 
 		////////////////////////////////////////////////////////////////////////
@@ -529,6 +543,13 @@
 		function commandResult(msg,className) {
 			column = -1;
 			updatePromptDisplay();
+            appendMessage(msg,className);
+            newPromptBox();
+        };
+
+        ////////////////////////////////////////////////////////////////////////
+        // Append message(s) to the console
+        function appendMessage(msg,className) {
 			if (typeof msg == 'string') {
 				message(msg,className);
 			} else if ($.isArray(msg)) {
@@ -539,8 +560,7 @@
 			} else { // Assume it's a DOM node or jQuery object.
 				inner.append(msg);
 			}
-			newPromptBox();
-		};
+        }
 
 		////////////////////////////////////////////////////////////////////////
 		// Display a message
