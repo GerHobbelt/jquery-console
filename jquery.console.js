@@ -112,6 +112,8 @@
 		var promptLabel = config && config.promptLabel? config.promptLabel : "> ";
 		var continuedPromptLabel = config && config.continuedPromptLabel?
 		config.continuedPromptLabel : "> ";
+        var passwordPromptLabel = config && config.passwordPromptLabel? 
+        config.passwordPromptLabel : "Password: ";
 		var column = 0;
 		var promptText = '';
 		var restoreText = '';
@@ -214,7 +216,13 @@
 			enableInput();
 			promptBox = $('<div class="jquery-console-prompt-box"></div>');
 			var label = $('<span class="jquery-console-prompt-label"></span>');
-			var labelText = extern.continuedPrompt? continuedPromptLabel : promptLabel;
+            if (extern.continuedPrompt) {
+                var labelText = continuedPromptLabel;
+            } else if (extern.passwordPrompt) {
+                var labelText = passwordPromptLabel;
+            } else {
+                var labelText = promptLabel;
+            }
 			promptBox.append(label.text(labelText).show());
 			label.html(label.html().replace(' ','&nbsp;'));
 			prompt = $('<span class="jquery-console-prompt"></span>');
@@ -453,19 +461,38 @@
 		function handleCommand() {
 			if (typeof config.commandHandle == 'function') {
 				disableInput();
-				addToHistory(promptText);
+                if(!extern.passwordPrompt) {
+                    addToHistory(promptText);
+                }
 				var text = promptText;
-				if (extern.continuedPrompt) {
-					if (continuedText)
-						continuedText += '\n' + promptText;
-					else continuedText = promptText;
-				} else continuedText = undefined;
-				if (continuedText) text = continuedText;
+                if (extern.passwordPrompt) {
+                    if (continuedText) {
+                        continuedText += ' ' + promptText;
+                    } else {
+                        continuedText = promptText
+                    }
+                } else if (extern.continuedPrompt) {
+                    if (continuedText) {
+                        continuedText += '\n' + promptText;
+                    } else {
+                        continuedText = promptText;
+                    }
+                } else {
+                    continuedText = undefined;
+                }
+                
+                if (continuedText) {
+                    text = continuedText;
+                }
+                
 				var ret = config.commandHandle(text,function(msgs){
 					commandResult(msgs);
 				});
-				if (extern.continuedPrompt && !continuedText)
+
+                if ((extern.continuedPrompt || extern.passwordPrompt) && !continuedText) {
 					continuedText = promptText;
+                }
+
 				if (typeof ret == 'boolean') {
 					if (ret) {
 						// Command succeeded without a result.
