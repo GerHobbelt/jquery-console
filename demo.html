@@ -65,18 +65,18 @@
            },
            commandHandle:function(line,report){
                setTimeout(function() {
-		   if(!console3CancelFlag)
-		       report(line);
-		   else {
-		       report([{msg:"User interrupt",
-				className:"jquery-console-message-error"}]);
-		       console3CancelFlag = false;
-		   }
-	       },1000);
+           if(!console3CancelFlag)
+               report(line);
+           else {
+               report([{msg:"User interrupt",
+                className:"jquery-console-message-error"}]);
+               console3CancelFlag = false;
+           }
+           },1000);
            },
            cancelHandle:function() {
-	       console3CancelFlag = true;
-	   },
+           console3CancelFlag = true;
+       },
            animateScroll:true,
            promptHistory:true
          });
